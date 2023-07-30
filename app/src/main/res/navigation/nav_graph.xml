@@ -9,14 +9,13 @@
         android:id="@+id/MainFragment"
         android:name="com.example.webinar20.MainFragment"
         android:label="@string/main_label"
-        tools:layout="@layout/fragment_first"/>
+        tools:layout="@layout/fragment_state_flow" />
 
     <fragment
         android:id="@+id/StateFlowFragment"
         android:name="com.example.webinar20.state_flow.StateFlowFragment"
         android:label="@string/state_flow_label"
-        tools:layout="@layout/fragment_first">
-    </fragment>
+        tools:layout="@layout/fragment_state_flow"></fragment>
 
     <fragment
         android:id="@+id/CallbackFragment"

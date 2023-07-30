@@ -1,13 +1,11 @@
 package com.example.webinar20
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.webinar20.R
-import com.example.webinar20.databinding.FragmentFirstBinding
 import com.example.webinar20.databinding.FragmentMainBinding
 
 class MainFragment : Fragment() {
@@ -24,6 +22,9 @@ class MainFragment : Fragment() {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         binding.buttonSharedState.setOnClickListener {
             findNavController().navigate(R.id.SharedStateFragment)
+        }
+        binding.buttonStateFlow.setOnClickListener {
+            findNavController().navigate(R.id.StateFlowFragment)
         }
         return binding.root
 
