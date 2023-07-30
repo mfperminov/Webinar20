@@ -22,14 +22,14 @@
         android:id="@+id/CallbackFragment"
         android:name="com.example.webinar20.callback.CallbackFragment"
         android:label="@string/callback_fragment_label"
-        tools:layout="@layout/fragment_second">
+        tools:layout="@layout/fragment_shared_state">
     </fragment>
 
     <fragment
         android:id="@+id/SharedStateFragment"
         android:name="com.example.webinar20.shared_state.SharedStateFragment"
         android:label="@string/shared_state_fragment_label"
-        tools:layout="@layout/fragment_second">
+        tools:layout="@layout/fragment_shared_state">
     </fragment>
 
 </navigation>

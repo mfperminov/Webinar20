@@ -3,7 +3,7 @@
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
     <string name="state_flow_label">State Flow showcase</string>
-    <string name="main_label">Main</string>
+    <string name="main_label">Webinar 20</string>
     <string name="callback_fragment_label">Callback showcase</string>
     <string name="shared_state_fragment_label">Mutable shared state showcase</string>
     <string name="next">Next</string>

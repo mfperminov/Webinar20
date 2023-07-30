@@ -8,10 +8,11 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.webinar20.R
 import com.example.webinar20.databinding.FragmentFirstBinding
+import com.example.webinar20.databinding.FragmentMainBinding
 
 class MainFragment : Fragment() {
 
-    private var _binding: FragmentFirstBinding? = null
+    private var _binding: FragmentMainBinding? = null
 
     private val binding get() = _binding!!
 
@@ -20,7 +21,10 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentFirstBinding.inflate(inflater, container, false)
+        _binding = FragmentMainBinding.inflate(inflater, container, false)
+        binding.buttonSharedState.setOnClickListener {
+            findNavController().navigate(R.id.SharedStateFragment)
+        }
         return binding.root
 
     }

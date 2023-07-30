@@ -5,16 +5,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
-import com.example.webinar20.R
-import com.example.webinar20.databinding.FragmentSecondBinding
+import androidx.lifecycle.lifecycleScope
+import com.example.webinar20.databinding.FragmentSharedStateBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.withContext
 
 class SharedStateFragment : Fragment() {
 
-    private var _binding: FragmentSecondBinding? = null
+    private var _binding: FragmentSharedStateBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -22,18 +24,57 @@ class SharedStateFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentSecondBinding.inflate(inflater, container, false)
+        _binding = FragmentSharedStateBinding.inflate(inflater, container, false)
         return binding.root
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.buttonStartCount.setOnClickListener {
+            runBlocking {
+                val mutableInteger = MutableInteger()
+
+                val job1 = lifecycleScope.launch(Dispatchers.IO) {
+                    repeat(10_000_000) {
+                        mutableInteger.increment()
+                    }
+                }
+
+                val job2 = lifecycleScope.launch(Dispatchers.IO) {
+                    repeat(10_000_000) {
+                        mutableInteger.increment()
+                    }
+                }
+                job1.join()
+                job2.join()
+                binding.textviewResult.text = mutableInteger.getValue().toString()
+            }
+
+        }
 
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+}
+
+class MutableInteger {
+    private var value = 0
+    private val mutex = Mutex()
+
+    suspend fun increment() {
+        mutex.lock()
+        try {
+            value++
+        } finally {
+            mutex.unlock()
+        }
+    }
+
+    fun getValue(): Int {
+        return value
     }
 }
