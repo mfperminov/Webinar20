@@ -26,6 +26,9 @@ class MainFragment : Fragment() {
         binding.buttonStateFlow.setOnClickListener {
             findNavController().navigate(R.id.StateFlowFragment)
         }
+        binding.buttonCallback.setOnClickListener {
+            findNavController().navigate(R.id.CallbackFragment)
+        }
         return binding.root
 
     }
