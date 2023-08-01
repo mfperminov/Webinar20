@@ -1,17 +1,17 @@
 package com.example.webinar20.shared_state
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.webinar20.databinding.FragmentSharedStateBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.sync.withLock
 
 class SharedStateFragment : Fragment() {
 
@@ -66,11 +66,8 @@ class MutableInteger {
     private val mutex = Mutex()
 
     suspend fun increment() {
-        mutex.lock()
-        try {
+        mutex.withLock {
             value++
-        } finally {
-            mutex.unlock()
         }
     }
 

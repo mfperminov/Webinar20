@@ -19,9 +19,9 @@ class StateFlowViewModel : ViewModel() {
     }
 
     fun increment() {
-        _screenStateFlow.update {
-            it.copy(
-                value = it.value + 1,
+        _screenStateFlow.update { oldState ->
+            oldState.copy(
+                value = oldState.value + 1,
                 message = "опа плюс один"
             )
         }

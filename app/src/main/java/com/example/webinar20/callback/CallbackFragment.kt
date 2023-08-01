@@ -29,8 +29,15 @@ class CallbackFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.launchRequest.setOnClickListener {
             lifecycleScope.launch {
-                val result = viewModel.fetchDataWithRetrofit("b54b16e1-ac3b-4bff-a11f-f7ae9ddc27e0")
-                binding.result.text = result.name
+                try {
+                    val result =
+                        viewModel.fetchDataWithRetrofit("b54b16e1-ac3b-4bff-a11f-f7ae9ddc27e0")
+                    binding.result.text = result.name
+                } catch (e: Exception) {
+                    binding.result.text = e.message
+                }
+
+
             }
         }
 
