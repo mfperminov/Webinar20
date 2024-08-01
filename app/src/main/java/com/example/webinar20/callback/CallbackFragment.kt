@@ -29,12 +29,12 @@ class CallbackFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.launchRequest.setOnClickListener {
             lifecycleScope.launch {
-                try {
+
                     val result =
                         viewModel.fetchDataWithRetrofit("b54b16e1-ac3b-4bff-a11f-f7ae9ddc27e0")
-                    binding.result.text = result.name
-                } catch (e: Exception) {
-                    binding.result.text = e.message
+
+                if (result is Result.Ok) {
+                    binding.result.text = result.response.name
                 }
 
 
@@ -46,5 +46,20 @@ class CallbackFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+}
+
+sealed interface Result {
+    class Ok(val response: ApiResponse) : Result
+
+    sealed class Error : Result {
+
+        class Backend(
+            val url: String,
+            val code: Int,
+            val error: Throwable
+        ) : Error()
+
+        class Network(val url: String, val error: Throwable) : Error()
     }
 }

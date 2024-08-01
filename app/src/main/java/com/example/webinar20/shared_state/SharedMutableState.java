@@ -5,7 +5,7 @@ class MutableIntegerJava {
 
     private int value;
 
-    public int increment() {
+    public synchronized int increment() {
         return value++;
     }
 

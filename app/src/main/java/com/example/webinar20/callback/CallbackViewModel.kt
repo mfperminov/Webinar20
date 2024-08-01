@@ -2,14 +2,14 @@ package com.example.webinar20.callback
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import kotlin.coroutines.resumeWithException
+import java.io.IOException
+import kotlin.coroutines.resume
 
 class CallbackViewModel : ViewModel() {
 
@@ -21,11 +21,11 @@ class CallbackViewModel : ViewModel() {
     private val api = retrofit.create(Api::class.java)
 
     // Coroutine function using suspendCancellableCoroutine
-    @OptIn(ExperimentalCoroutinesApi::class)
-    suspend fun fetchDataWithRetrofit(param: String): ApiResponse {
+
+    suspend fun fetchDataWithRetrofit(param: String): Result {
         return suspendCancellableCoroutine { continuation ->
             // Call your Retrofit API function
-            val call = api.fetchBreweryData(param)
+            val call: Call<ApiResponse> = api.fetchBreweryData(param)
 
             // Cancel the Retrofit call if the coroutine is cancelled
             continuation.invokeOnCancellation {
@@ -35,9 +35,15 @@ class CallbackViewModel : ViewModel() {
             call.enqueue(object : Callback<ApiResponse> {
                 override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
                     if (response.isSuccessful) {
-                        continuation.resume(response.body()!!) { call.cancel() }
+                        continuation.resume(Result.Ok(response.body()!!))
                     } else {
-                        continuation.resumeWithException(Exception("Failed to fetch data"))
+                        continuation.resume(
+                            Result.Error.Backend(
+                                call.request().url().toString(),
+                                response.code(),
+                                IOException()
+                            )
+                        ) // TODO
                     }
                 }
 
@@ -45,10 +51,17 @@ class CallbackViewModel : ViewModel() {
                     if (t is CancellationException) {
                         /*nothing*/
                     } else {
-                        continuation.resumeWithException(t)
+                        continuation.resume(
+                            Result.Error.Network(
+                                call.request().url().toString(),
+                                t
+                            )
+                        )
                     }
                 }
+
             })
+
         }
     }
 

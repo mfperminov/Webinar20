@@ -9,7 +9,6 @@ import androidx.lifecycle.lifecycleScope
 import com.example.webinar20.databinding.FragmentSharedStateBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
@@ -32,7 +31,7 @@ class SharedStateFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.buttonStartCount.setOnClickListener {
-            runBlocking {
+            lifecycleScope.launch {
                 val mutableInteger = MutableInteger()
 
                 val job1 = lifecycleScope.launch(Dispatchers.IO) {

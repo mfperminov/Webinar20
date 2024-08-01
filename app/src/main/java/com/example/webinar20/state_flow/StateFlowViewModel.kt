@@ -19,10 +19,10 @@ class StateFlowViewModel : ViewModel() {
     }
 
     fun increment() {
-        _screenStateFlow.update { oldState ->
-            oldState.copy(
-                value = oldState.value + 1,
-                message = "опа плюс один"
+        _screenStateFlow.update {
+            it.copy(
+                counterValue = it.counterValue + 1,
+                message = "плюс"
             )
         }
     }
@@ -30,8 +30,8 @@ class StateFlowViewModel : ViewModel() {
     fun decrement() {
         _screenStateFlow.update {
             it.copy(
-                value = it.value - 1,
-                message = "минус один("
+                counterValue = it.counterValue - 1,
+                message = "минус"
             )
         }
     }
@@ -41,8 +41,9 @@ class StateFlowViewModel : ViewModel() {
             delay(10000L)
             _screenStateFlow.update {
                 it.copy(
-                    value = it.value + 5,
-                    message = "Пришел ответ с сервера плюс пять"
+                    counterValue = it.counterValue + 5,
+                    message = "cервер ответил плюс 5",
+                    messageFromServer = true
                 )
             }
         }
@@ -50,4 +51,8 @@ class StateFlowViewModel : ViewModel() {
 
 }
 
-data class ScreenState(val value: Int, val message: String?)
+data class ScreenState(
+    val counterValue: Int,
+    val message: String?,
+    val messageFromServer: Boolean = false
+)

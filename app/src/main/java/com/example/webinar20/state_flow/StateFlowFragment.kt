@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.webinar20.databinding.FragmentStateFlowBinding
+import kotlinx.coroutines.launch
 
 class StateFlowFragment : Fragment() {
 
@@ -31,10 +32,20 @@ class StateFlowFragment : Fragment() {
         binding.decrement.setOnClickListener {
             viewModel.decrement()
         }
-        lifecycleScope.launchWhenStarted {
-            viewModel.screenStateFlow.collect {
-                binding.result.text = "${it.value} ${it.message}"
+        lifecycleScope.launch {
+            viewModel.screenStateFlow.collect { state ->
+                renderUi(state)
             }
+        }
+    }
+
+    private fun renderUi(state: ScreenState) {
+        binding.value.text = state.counterValue.toString()
+        binding.message.text = state.message
+        if (!state.messageFromServer) {
+            binding.top.text = "Ждем сообщения от сервера"
+        } else {
+            binding.top.text = ""
         }
     }
 
